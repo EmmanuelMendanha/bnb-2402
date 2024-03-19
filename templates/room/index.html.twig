@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}What is your next sweet home?
+{% endblock %}
+
+{% block body %}
+	<div class="p-5 mb-4 border-bottom border-2">
+		<h1 class="">
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+				Welcome back
+				<span class="text-main">{{ app.user.firstname }}</span>!
+			{% else %}
+				What is your next sweet home?
+			{% endif %}
+		</h1>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			{% if  is_granted('ROLE_HOST') %}
+				{% if hostRooms|length > 0 %} 
+					{% for item in hostRooms %}
+						{{ include('components/card.html.twig') }}
+					{% endfor %}
+
+					<div class="d-flex justify-content-center my-5">
+						{# {{ knp_pagination_render(hostRooms) }} #}
+					</div>
+				{% else %}
+					<div class="text-center">
+						<p>You don't have any room yet.</p>
+						<a href="#" class="btn btn-custom rounded-pill w-auto">Create your first room</a>
+					</div>
+				{% endif %}
+			{% else %}
+				{% for item in rooms %}
+					{{ include('components/card.html.twig') }}
+				{% endfor %}
+
+				<div class="d-flex justify-content-center my-5">
+					{{ knp_pagination_render(rooms) }}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+	{% block footer %}
+		{% include 'components/footer-city.html.twig' %}
+	{% endblock %}
+
+{% endblock %}

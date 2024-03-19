@@ -1,0 +1,44 @@
+<div class="col-md-4 col-sm-6 mb-5 text-decoration-none">
+	<div class="position-relative">
+		<div class="img-overlay p-2 position-absolute h-100 w-100 d-flex flex-column justify-content-between rounded-4">
+			{# Check favorite #}
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}	
+				{% if item.isFavorite(app.user) %}
+					<a class="text-end" href={{ path('remove_favorite', { room: item.id }) }}>
+						<i class="bi bi-heart-fill text-danger"></i>
+					</a>
+				{% else %}
+					<a class="text-end" href={{ path('add_favorite', { room: item.id }) }}>
+						<i class="bi bi-heart text-white"></i>
+					</a>
+				{% endif %}
+			{% else %}
+					<a class="text-end" href={{ path('add_favorite', { room: item.id }) }}>
+						<i class="bi bi-heart text-white"></i>
+					</a>
+			{% endif %}
+			{# Host info : img + firstname #}
+			<div class="card-host-info d-flex gap-2 align-items-center">
+				<img src="{{ asset('uploads/users/') }}{{ item.host.image }}" alt="{{ item.host.firstname }} {{item.host.lastname }}" class="rounded-pill">
+				<p class="text-white m-0">{{ item.host.firstname }}</p>
+			</div>
+		</div>
+		<img src="{{ asset('uploads/rooms/') }}{{ item.cover }}" class="img-fluid rounded-4" alt="{{ item.title }}">
+	</div>
+	{# Host more infos #}
+	<div>
+	{% if is_granted('ROLE_HOST') %}
+		TODO
+		{% else %}
+			<a class="text-dark text-decoration-none" href={{ path('room', { id : item.id}) }}>
+				<p class="fw-bold mt-3 mb-1 text-dark">{{ item.title|slice(0,30) }}...</p>
+				<p class="text-dark mb-1">start from
+					<span class="fw-bold">{{ item.price }}€</span>
+					per night</p>
+				<p class="text-dark">Details
+					<i class="bi bi-arrow-right"></i>
+				</p>
+			</a>
+	{% endif %}
+	</div>
+</div>
